@@ -2,82 +2,139 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Enterprise Supply Chain Command Center Design System */
 
 @layer base {
   :root {
-    --background: 220 26% 6%;
-    --foreground: 210 40% 98%;
+    /* Castrol Light Theme - Clean White Design */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 15%;
 
-    --card: 220 20% 10%;
-    --card-foreground: 210 40% 98%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 15%;
 
-    --popover: 220 20% 10%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 15%;
 
-    --primary: 189 94% 55%;
-    --primary-foreground: 220 26% 6%;
+    /* Castrol Brand Green - Official Color #00A651 */
+    --primary: 145 100% 33%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 220 20% 14%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 15%;
 
-    --muted: 220 20% 14%;
-    --muted-foreground: 215 20% 65%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
 
-    --accent: 189 94% 55%;
-    --accent-foreground: 220 26% 6%;
+    --accent: 145 100% 33%;
+    --accent-foreground: 0 0% 100%;
+
+    /* Alert Severity Colors */
+    --critical: 0 84% 60%;
+    --critical-foreground: 0 0% 100%;
+    
+    --warning: 38 100% 55%;
+    --warning-foreground: 0 0% 15%;
+    
+    --success: 145 100% 33%;
+    --success-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 90%;
+    --input: 0 0% 96%;
+    --ring: 145 100% 33%;
+
+    --radius: 8px;
+
+    /* KPI Colors */
+    --kpi-revenue: 145 100% 33%;
+    --kpi-volume: 199 89% 48%;
+    --kpi-otif: 38 100% 55%;
+    --kpi-inventory: 277 100% 75%;
+    --kpi-forecast: 24 100% 50%;
+    --kpi-health: 145 100% 33%;
+    --kpi-risk: 0 84% 60%;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(145 100% 33%), hsl(145 100% 28%));
+    --gradient-card: linear-gradient(135deg, hsl(0 0% 100%), hsl(0 0% 98%));
+    --gradient-critical: linear-gradient(135deg, hsl(0 84% 60%), hsl(0 84% 50%));
+    --gradient-warning: linear-gradient(135deg, hsl(38 100% 55%), hsl(38 100% 45%));
+    --gradient-success: linear-gradient(135deg, hsl(145 100% 33%), hsl(145 100% 28%));
+
+    /* Shadows */
+    --shadow-command: 0 4px 20px -4px hsl(0 0% 0% / 0.1);
+    --shadow-alert: 0 8px 32px -8px hsl(0 84% 60% / 0.2);
+    --shadow-card: 0 2px 10px -2px hsl(0 0% 0% / 0.08);
+
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 220 20% 18%;
-    --input: 220 20% 18%;
-    --ring: 189 94% 55%;
-
-    --radius: 0.75rem;
-
-    /* Custom design tokens */
-    --gradient-primary: linear-gradient(135deg, hsl(189, 94%, 55%) 0%, hsl(220, 85%, 60%) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(189, 94%, 55%) 0%, hsl(280, 85%, 60%) 100%);
-    --glow-primary: 0 0 40px hsl(189 94% 55% / 0.3);
-    --glow-accent: 0 0 60px hsl(189 94% 55% / 0.5);
-    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
 
 @layer base {
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Clash+Display:wght@500;600;700&display=swap');
-
   * {
     @apply border-border;
   }
 
   body {
     @apply bg-background text-foreground;
-    font-family: 'Inter', sans-serif;
-  }
-
-  h1, h2, h3, h4, h5, h6 {
-    font-family: 'Clash Display', sans-serif;
-  }
-}
-
-@layer utilities {
-  .gradient-text {
-    background: var(--gradient-primary);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  
-  .animate-glow {
-    animation: glow 3s ease-in-out infinite;
-  }
-  
-  @keyframes glow {
-    0%, 100% { filter: drop-shadow(var(--glow-primary)); }
-    50% { filter: drop-shadow(var(--glow-accent)); }
   }
 }
