@@ -1,6 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { useState } from "react";
 
 // Define data sources and agents for each workflow tab
 const workflowDataMapping = {
@@ -71,6 +72,18 @@ const workflowDataMapping = {
 };
 
 export function TariffMeshDiagram() {
+  const [selectedWorkflow, setSelectedWorkflow] = useState<keyof typeof workflowDataMapping | null>(null);
+  
+  const getHighlightedItems = () => {
+    if (!selectedWorkflow) return { agents: [], dataSources: [] };
+    return {
+      agents: workflowDataMapping[selectedWorkflow].agents,
+      dataSources: workflowDataMapping[selectedWorkflow].dataSources.map(d => d.name)
+    };
+  };
+
+  const highlighted = getHighlightedItems();
+
   return (
     <TooltipProvider>
       <div className="w-full bg-gradient-to-b from-background via-accent/5 to-background p-8 rounded-lg border border-border/50">
@@ -91,35 +104,45 @@ export function TariffMeshDiagram() {
       <div className="mb-8">
         <h3 className="text-center text-lg font-semibold text-foreground/80 mb-6 tracking-wider">DATA SOURCES OF TRUTH</h3>
         <div className="grid grid-cols-5 gap-4">
-          <Card className="p-4 bg-gradient-to-br from-blue-500/10 to-blue-600/5 border-blue-500/30 hover:border-blue-500/60 transition-all duration-300">
-            <div className="text-xs font-semibold text-blue-400 mb-2">US Trade Representative</div>
-            <div className="text-xs text-muted-foreground font-medium mb-1">REAL-TIME TARIFF DATABASE</div>
-            <div className="text-xs text-muted-foreground/70">Section 301 tariff rates and classifications</div>
-          </Card>
+          <DataSourceCard 
+            name="US Trade Representative"
+            label="REAL-TIME TARIFF DATABASE"
+            description="Section 301 tariff rates and classifications"
+            color="blue"
+            isHighlighted={highlighted.dataSources.includes("US Trade Representative")}
+          />
           
-          <Card className="p-4 bg-gradient-to-br from-purple-500/10 to-purple-600/5 border-purple-500/30 hover:border-purple-500/60 transition-all duration-300">
-            <div className="text-xs font-semibold text-purple-400 mb-2">US Customs & Border Protection</div>
-            <div className="text-xs text-muted-foreground font-medium mb-1">HTS CODE INTELLIGENCE</div>
-            <div className="text-xs text-muted-foreground/70">Harmonized tariff schedule tracking</div>
-          </Card>
+          <DataSourceCard 
+            name="US Customs & Border Protection"
+            label="HTS CODE INTELLIGENCE"
+            description="Harmonized tariff schedule tracking"
+            color="purple"
+            isHighlighted={highlighted.dataSources.includes("US Customs & Border Protection")}
+          />
           
-          <Card className="p-4 bg-gradient-to-br from-pink-500/10 to-pink-600/5 border-pink-500/30 hover:border-pink-500/60 transition-all duration-300">
-            <div className="text-xs font-semibold text-pink-400 mb-2">SAP GTS</div>
-            <div className="text-xs text-muted-foreground font-medium mb-1">GLOBAL TRADE SERVICES</div>
-            <div className="text-xs text-muted-foreground/70">Component origin tracking via BOM</div>
-          </Card>
+          <DataSourceCard 
+            name="SAP GTS"
+            label="GLOBAL TRADE SERVICES"
+            description="Component origin tracking via BOM"
+            color="pink"
+            isHighlighted={highlighted.dataSources.includes("SAP GTS")}
+          />
           
-          <Card className="p-4 bg-gradient-to-br from-cyan-500/10 to-cyan-600/5 border-cyan-500/30 hover:border-cyan-500/60 transition-all duration-300">
-            <div className="text-xs font-semibold text-cyan-400 mb-2">Supplier Network Data</div>
-            <div className="text-xs text-muted-foreground font-medium mb-1">SUPPLY CHAIN INTELLIGENCE</div>
-            <div className="text-xs text-muted-foreground/70">Real-time supplier capacity and pricing</div>
-          </Card>
+          <DataSourceCard 
+            name="Supplier Network Data"
+            label="SUPPLY CHAIN INTELLIGENCE"
+            description="Real-time supplier capacity and pricing"
+            color="cyan"
+            isHighlighted={highlighted.dataSources.includes("Supplier Network Data")}
+          />
           
-          <Card className="p-4 bg-gradient-to-br from-green-500/10 to-green-600/5 border-green-500/30 hover:border-green-500/60 transition-all duration-300">
-            <div className="text-xs font-semibold text-green-400 mb-2">Trade Policy Monitor</div>
-            <div className="text-xs text-muted-foreground font-medium mb-1">REGULATORY INTELLIGENCE</div>
-            <div className="text-xs text-muted-foreground/70">Federal Register & trade announcements</div>
-          </Card>
+          <DataSourceCard 
+            name="Trade Policy Monitor"
+            label="REGULATORY INTELLIGENCE"
+            description="Federal Register & trade announcements"
+            color="green"
+            isHighlighted={highlighted.dataSources.includes("Trade Policy Monitor")}
+          />
         </div>
       </div>
 
@@ -156,25 +179,25 @@ export function TariffMeshDiagram() {
 
         <div className="grid grid-cols-5 gap-3 relative" style={{ zIndex: 1 }}>
           {/* Row 1 - Monitoring Agents */}
-          <AgentBadge color="blue" label="Tariff Rate Monitor" />
-          <AgentBadge color="purple" label="HTS Classification Agent" />
-          <AgentBadge color="pink" label="Origin Tracking Agent" />
-          <AgentBadge color="cyan" label="Supplier Capacity Agent" />
-          <AgentBadge color="green" label="Policy Alert Agent" />
+          <AgentBadge color="blue" label="Tariff Rate Monitor" isHighlighted={highlighted.agents.includes("Tariff Rate Monitor")} />
+          <AgentBadge color="purple" label="HTS Classification Agent" isHighlighted={highlighted.agents.includes("HTS Classification Agent")} />
+          <AgentBadge color="pink" label="Origin Tracking Agent" isHighlighted={highlighted.agents.includes("Origin Tracking Agent")} />
+          <AgentBadge color="cyan" label="Supplier Capacity Agent" isHighlighted={highlighted.agents.includes("Supplier Capacity Agent")} />
+          <AgentBadge color="green" label="Policy Alert Agent" isHighlighted={highlighted.agents.includes("Policy Alert Agent")} />
           
           {/* Row 2 - Analysis Agents */}
-          <AgentBadge color="blue" label="Duty Impact Calculator" />
-          <AgentBadge color="purple" label="Cost Analysis Agent" />
-          <AgentBadge color="pink" label="Compliance Validator" />
-          <AgentBadge color="cyan" label="Risk Assessment Agent" />
-          <AgentBadge color="green" label="Trade Rule Agent" />
+          <AgentBadge color="blue" label="Duty Impact Calculator" isHighlighted={highlighted.agents.includes("Duty Impact Calculator")} />
+          <AgentBadge color="purple" label="Cost Analysis Agent" isHighlighted={highlighted.agents.includes("Cost Analysis Agent")} />
+          <AgentBadge color="pink" label="Compliance Validator" isHighlighted={highlighted.agents.includes("Compliance Validator")} />
+          <AgentBadge color="cyan" label="Risk Assessment Agent" isHighlighted={highlighted.agents.includes("Risk Assessment Agent")} />
+          <AgentBadge color="green" label="Trade Rule Agent" isHighlighted={highlighted.agents.includes("Trade Rule Agent")} />
           
           {/* Row 3 - Processing Agents */}
-          <AgentBadge color="blue" label="Financial Impact Agent" />
-          <AgentBadge color="purple" label="Supply Chain Agent" />
-          <AgentBadge color="pink" label="Product Impact Agent" />
-          <AgentBadge color="cyan" label="Customer Impact Agent" />
-          <AgentBadge color="green" label="Timeline Tracker" />
+          <AgentBadge color="blue" label="Financial Impact Agent" isHighlighted={highlighted.agents.includes("Financial Impact Agent")} />
+          <AgentBadge color="purple" label="Supply Chain Agent" isHighlighted={highlighted.agents.includes("Supply Chain Agent")} />
+          <AgentBadge color="pink" label="Product Impact Agent" isHighlighted={highlighted.agents.includes("Product Impact Agent")} />
+          <AgentBadge color="cyan" label="Customer Impact Agent" isHighlighted={highlighted.agents.includes("Customer Impact Agent")} />
+          <AgentBadge color="green" label="Timeline Tracker" isHighlighted={highlighted.agents.includes("Timeline Tracker")} />
         </div>
       </div>
 
@@ -233,6 +256,8 @@ export function TariffMeshDiagram() {
               "Timeline reconstruction"
             ]}
             workflowKey="Understand Alert"
+            isSelected={selectedWorkflow === "Understand Alert"}
+            onClick={() => setSelectedWorkflow(selectedWorkflow === "Understand Alert" ? null : "Understand Alert")}
           />
           
           <WorkflowAgentCard
@@ -247,6 +272,8 @@ export function TariffMeshDiagram() {
               "Trade policy advocacy"
             ]}
             workflowKey="Recommended Actions"
+            isSelected={selectedWorkflow === "Recommended Actions"}
+            onClick={() => setSelectedWorkflow(selectedWorkflow === "Recommended Actions" ? null : "Recommended Actions")}
           />
           
           <WorkflowAgentCard
@@ -261,6 +288,8 @@ export function TariffMeshDiagram() {
               "Timeline optimization"
             ]}
             workflowKey="Decision Simulator"
+            isSelected={selectedWorkflow === "Decision Simulator"}
+            onClick={() => setSelectedWorkflow(selectedWorkflow === "Decision Simulator" ? null : "Decision Simulator")}
           />
           
           <WorkflowAgentCard
@@ -275,6 +304,8 @@ export function TariffMeshDiagram() {
               "Stakeholder notifications"
             ]}
             workflowKey="Trigger Workflow"
+            isSelected={selectedWorkflow === "Trigger Workflow"}
+            onClick={() => setSelectedWorkflow(selectedWorkflow === "Trigger Workflow" ? null : "Trigger Workflow")}
           />
           
           <WorkflowAgentCard
@@ -289,6 +320,8 @@ export function TariffMeshDiagram() {
               "Playbook learning"
             ]}
             workflowKey="Track Impact"
+            isSelected={selectedWorkflow === "Track Impact"}
+            onClick={() => setSelectedWorkflow(selectedWorkflow === "Track Impact" ? null : "Track Impact")}
           />
         </div>
       </div>
@@ -297,14 +330,73 @@ export function TariffMeshDiagram() {
   );
 }
 
-// Helper component for agent badges
-function AgentBadge({ color, label }: { color: string; label: string }) {
+// Helper component for data source cards
+function DataSourceCard({ 
+  name, 
+  label, 
+  description, 
+  color, 
+  isHighlighted 
+}: { 
+  name: string; 
+  label: string; 
+  description: string; 
+  color: string; 
+  isHighlighted: boolean;
+}) {
   const colorClasses = {
-    blue: "bg-blue-500/10 border-blue-500/30 text-blue-400",
-    purple: "bg-purple-500/10 border-purple-500/30 text-purple-400",
-    pink: "bg-pink-500/10 border-pink-500/30 text-pink-400",
-    cyan: "bg-cyan-500/10 border-cyan-500/30 text-cyan-400",
-    green: "bg-green-500/10 border-green-500/30 text-green-400"
+    blue: isHighlighted 
+      ? "from-blue-500/30 to-blue-600/20 border-blue-500/80 shadow-lg shadow-blue-500/50" 
+      : "from-blue-500/10 to-blue-600/5 border-blue-500/30 hover:border-blue-500/60",
+    purple: isHighlighted 
+      ? "from-purple-500/30 to-purple-600/20 border-purple-500/80 shadow-lg shadow-purple-500/50" 
+      : "from-purple-500/10 to-purple-600/5 border-purple-500/30 hover:border-purple-500/60",
+    pink: isHighlighted 
+      ? "from-pink-500/30 to-pink-600/20 border-pink-500/80 shadow-lg shadow-pink-500/50" 
+      : "from-pink-500/10 to-pink-600/5 border-pink-500/30 hover:border-pink-500/60",
+    cyan: isHighlighted 
+      ? "from-cyan-500/30 to-cyan-600/20 border-cyan-500/80 shadow-lg shadow-cyan-500/50" 
+      : "from-cyan-500/10 to-cyan-600/5 border-cyan-500/30 hover:border-cyan-500/60",
+    green: isHighlighted 
+      ? "from-green-500/30 to-green-600/20 border-green-500/80 shadow-lg shadow-green-500/50" 
+      : "from-green-500/10 to-green-600/5 border-green-500/30 hover:border-green-500/60"
+  };
+
+  const textColorClasses = {
+    blue: "text-blue-400",
+    purple: "text-purple-400",
+    pink: "text-pink-400",
+    cyan: "text-cyan-400",
+    green: "text-green-400"
+  };
+
+  return (
+    <Card className={`p-4 bg-gradient-to-br ${colorClasses[color as keyof typeof colorClasses]} transition-all duration-300 ${isHighlighted ? 'scale-105 ring-2 ring-current' : ''}`}>
+      <div className={`text-xs font-semibold ${textColorClasses[color as keyof typeof textColorClasses]} mb-2`}>{name}</div>
+      <div className="text-xs text-muted-foreground font-medium mb-1">{label}</div>
+      <div className="text-xs text-muted-foreground/70">{description}</div>
+    </Card>
+  );
+}
+
+// Helper component for agent badges
+function AgentBadge({ color, label, isHighlighted }: { color: string; label: string; isHighlighted: boolean }) {
+  const colorClasses = {
+    blue: isHighlighted 
+      ? "bg-blue-500/30 border-blue-500/80 text-blue-300 shadow-lg shadow-blue-500/50 scale-105" 
+      : "bg-blue-500/10 border-blue-500/30 text-blue-400",
+    purple: isHighlighted 
+      ? "bg-purple-500/30 border-purple-500/80 text-purple-300 shadow-lg shadow-purple-500/50 scale-105" 
+      : "bg-purple-500/10 border-purple-500/30 text-purple-400",
+    pink: isHighlighted 
+      ? "bg-pink-500/30 border-pink-500/80 text-pink-300 shadow-lg shadow-pink-500/50 scale-105" 
+      : "bg-pink-500/10 border-pink-500/30 text-pink-400",
+    cyan: isHighlighted 
+      ? "bg-cyan-500/30 border-cyan-500/80 text-cyan-300 shadow-lg shadow-cyan-500/50 scale-105" 
+      : "bg-cyan-500/10 border-cyan-500/30 text-cyan-400",
+    green: isHighlighted 
+      ? "bg-green-500/30 border-green-500/80 text-green-300 shadow-lg shadow-green-500/50 scale-105" 
+      : "bg-green-500/10 border-green-500/30 text-green-400"
   };
 
   return (
@@ -321,7 +413,9 @@ function WorkflowAgentCard({
   title, 
   description, 
   details,
-  workflowKey
+  workflowKey,
+  isSelected,
+  onClick
 }: { 
   color: string; 
   icon: string; 
@@ -329,13 +423,25 @@ function WorkflowAgentCard({
   description: string; 
   details: string[];
   workflowKey: keyof typeof workflowDataMapping;
+  isSelected: boolean;
+  onClick: () => void;
 }) {
   const colorClasses = {
-    red: "from-red-500/10 to-red-600/5 border-red-500/40 hover:border-red-500/70",
-    emerald: "from-emerald-500/10 to-emerald-600/5 border-emerald-500/40 hover:border-emerald-500/70",
-    amber: "from-amber-500/10 to-amber-600/5 border-amber-500/40 hover:border-amber-500/70",
-    violet: "from-violet-500/10 to-violet-600/5 border-violet-500/40 hover:border-violet-500/70",
-    sky: "from-sky-500/10 to-sky-600/5 border-sky-500/40 hover:border-sky-500/70"
+    red: isSelected 
+      ? "from-red-500/30 to-red-600/20 border-red-500/90 ring-2 ring-red-500/60 shadow-2xl shadow-red-500/50 scale-105" 
+      : "from-red-500/10 to-red-600/5 border-red-500/40 hover:border-red-500/70",
+    emerald: isSelected 
+      ? "from-emerald-500/30 to-emerald-600/20 border-emerald-500/90 ring-2 ring-emerald-500/60 shadow-2xl shadow-emerald-500/50 scale-105" 
+      : "from-emerald-500/10 to-emerald-600/5 border-emerald-500/40 hover:border-emerald-500/70",
+    amber: isSelected 
+      ? "from-amber-500/30 to-amber-600/20 border-amber-500/90 ring-2 ring-amber-500/60 shadow-2xl shadow-amber-500/50 scale-105" 
+      : "from-amber-500/10 to-amber-600/5 border-amber-500/40 hover:border-amber-500/70",
+    violet: isSelected 
+      ? "from-violet-500/30 to-violet-600/20 border-violet-500/90 ring-2 ring-violet-500/60 shadow-2xl shadow-violet-500/50 scale-105" 
+      : "from-violet-500/10 to-violet-600/5 border-violet-500/40 hover:border-violet-500/70",
+    sky: isSelected 
+      ? "from-sky-500/30 to-sky-600/20 border-sky-500/90 ring-2 ring-sky-500/60 shadow-2xl shadow-sky-500/50 scale-105" 
+      : "from-sky-500/10 to-sky-600/5 border-sky-500/40 hover:border-sky-500/70"
   };
 
   const workflowData = workflowDataMapping[workflowKey];
@@ -344,6 +450,7 @@ function WorkflowAgentCard({
     <Tooltip delayDuration={200}>
       <TooltipTrigger asChild>
         <Card 
+          onClick={onClick}
           className={`p-4 bg-gradient-to-br ${colorClasses[color as keyof typeof colorClasses]} transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer`}
         >
           <div className="text-2xl mb-2 text-center">{icon}</div>
