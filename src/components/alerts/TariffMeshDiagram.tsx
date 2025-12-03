@@ -86,253 +86,252 @@ export function TariffMeshDiagram() {
 
   return (
     <TooltipProvider>
-      <div className="w-full bg-gradient-to-b from-background via-accent/5 to-background p-8 rounded-lg border border-border/50">
-      {/* Header */}
-      <div className="text-center mb-12 space-y-3">
-        <div className="flex items-center justify-center gap-3">
-          <div className="w-12 h-12 rounded-full bg-primary/20 border-2 border-primary flex items-center justify-center">
-            <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-            </svg>
-          </div>
-          <h2 className="text-3xl font-bold text-foreground">Tariff Alert - Agentic Intelligence Mesh</h2>
-        </div>
-        <p className="text-muted-foreground text-sm">Real-time intelligent orchestration across global tariff monitoring sources</p>
-      </div>
-
-      {/* Workflow Agents - Top Layer (5 Tabs) */}
-      <div className="relative mb-8">
-        <div className="grid grid-cols-5 gap-4 relative" style={{ zIndex: 1 }}>
-          <WorkflowAgentCard
-            color="red"
-            icon="🔍"
-            title="Understand Alert"
-            description="Root cause analysis & impact assessment"
-            details={[
-              "Tariff change detection",
-              "Financial impact calculation",
-              "Customer exposure analysis",
-              "Timeline reconstruction"
-            ]}
-            workflowKey="Understand Alert"
-            isSelected={selectedWorkflow === "Understand Alert"}
-            onClick={() => setSelectedWorkflow(selectedWorkflow === "Understand Alert" ? null : "Understand Alert")}
-          />
+      <div className="w-full bg-gradient-to-b from-background via-accent/5 to-background p-8 rounded-lg border border-border/50 relative">
+        
+        {/* SVG Connection Lines Layer - Behind everything */}
+        <svg 
+          className="absolute inset-0 w-full h-full pointer-events-none" 
+          style={{ zIndex: 0 }}
+          preserveAspectRatio="none"
+        >
+          <defs>
+            <linearGradient id="lineGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.7" />
+              <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0.3" />
+            </linearGradient>
+          </defs>
           
-          <WorkflowAgentCard
-            color="emerald"
-            icon="💡"
-            title="Recommended Actions"
-            description="AI-generated mitigation strategies"
-            details={[
-              "Supplier diversification",
-              "Pricing strategies",
-              "Inventory optimization",
-              "Trade policy advocacy"
-            ]}
-            workflowKey="Recommended Actions"
-            isSelected={selectedWorkflow === "Recommended Actions"}
-            onClick={() => setSelectedWorkflow(selectedWorkflow === "Recommended Actions" ? null : "Recommended Actions")}
-          />
+          {/* Lines from Workflow tabs (top) to Central Hub (middle) */}
+          {[0, 1, 2, 3, 4].map((i) => (
+            <line
+              key={`workflow-hub-${i}`}
+              x1={`${10 + i * 20}%`}
+              y1="18%"
+              x2="50%"
+              y2="32%"
+              stroke="url(#lineGradient)"
+              strokeWidth="2"
+              className="animate-pulse"
+              style={{ animationDelay: `${i * 0.15}s` }}
+            />
+          ))}
           
-          <WorkflowAgentCard
-            color="amber"
-            icon="🎯"
-            title="Decision Simulator"
-            description="Scenario modeling & optimization"
-            details={[
-              "Multi-action simulation",
-              "Cost-benefit analysis",
-              "Risk trade-off modeling",
-              "Timeline optimization"
-            ]}
-            workflowKey="Decision Simulator"
-            isSelected={selectedWorkflow === "Decision Simulator"}
-            onClick={() => setSelectedWorkflow(selectedWorkflow === "Decision Simulator" ? null : "Decision Simulator")}
-          />
-          
-          <WorkflowAgentCard
-            color="violet"
-            icon="⚡"
-            title="Trigger Workflow"
-            description="Automated execution engine"
-            details={[
-              "Procurement automation",
-              "Contract negotiation",
-              "Inventory adjustments",
-              "Stakeholder notifications"
-            ]}
-            workflowKey="Trigger Workflow"
-            isSelected={selectedWorkflow === "Trigger Workflow"}
-            onClick={() => setSelectedWorkflow(selectedWorkflow === "Trigger Workflow" ? null : "Trigger Workflow")}
-          />
-          
-          <WorkflowAgentCard
-            color="sky"
-            icon="📊"
-            title="Track Impact"
-            description="Real-time performance monitoring"
-            details={[
-              "Cost savings tracking",
-              "OTIF monitoring",
-              "Risk reduction metrics",
-              "Playbook learning"
-            ]}
-            workflowKey="Track Impact"
-            isSelected={selectedWorkflow === "Track Impact"}
-            onClick={() => setSelectedWorkflow(selectedWorkflow === "Track Impact" ? null : "Track Impact")}
-          />
-        </div>
-
-        {/* Connection lines from workflow tabs to center */}
-        <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 0, height: '150%', top: '50%' }}>
-          {[...Array(5)].map((_, i) => {
-            const x1 = ((i * 20) + 10) + '%';
-            return (
+          {/* Lines from Central Hub to Agent badges */}
+          {[0, 1, 2, 3, 4].map((col) => 
+            [0, 1, 2].map((row) => (
               <line
-                key={i}
-                x1={x1}
-                y1="0%"
-                x2="50%"
-                y2="100%"
-                stroke="hsl(var(--primary))"
-                strokeWidth="2"
-                opacity="0.6"
-                className="animate-pulse"
-                style={{ animationDelay: `${i * 0.15}s` }}
-              />
-            );
-          })}
-        </svg>
-      </div>
-
-      {/* Central Intelligence Hub */}
-      <div className="flex justify-center mb-8 relative" style={{ zIndex: 2 }}>
-        <Card className="w-96 p-6 bg-gradient-to-br from-primary/20 via-primary/10 to-accent/10 border-2 border-primary shadow-lg shadow-primary/20">
-          <div className="flex items-center justify-center gap-3 mb-2">
-            <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-            </svg>
-            <h3 className="text-xl font-bold text-foreground">Central Alert Intelligence Hub</h3>
-          </div>
-          <p className="text-center text-sm text-muted-foreground">Central Orchestration & Decision Engine</p>
-        </Card>
-      </div>
-
-      {/* Middle Agent Layer */}
-      <div className="mb-8 relative">
-        {/* Connection lines from center to agents */}
-        <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 0, height: '150%', top: '-50%' }}>
-          {[...Array(15)].map((_, i) => {
-            const x2 = ((i % 5) * 20 + 10) + '%';
-            const y2 = Math.floor(i / 5) * 33 + 66 + '%';
-            return (
-              <line
-                key={i}
+                key={`hub-agent-${col}-${row}`}
                 x1="50%"
-                y1="0%"
-                x2={x2}
-                y2={y2}
-                stroke="hsl(var(--primary))"
+                y1="38%"
+                x2={`${10 + col * 20}%`}
+                y2={`${48 + row * 8}%`}
+                stroke="url(#lineGradient)"
                 strokeWidth="1.5"
                 opacity="0.5"
                 className="animate-pulse"
-                style={{ animationDelay: `${i * 0.1}s` }}
+                style={{ animationDelay: `${(col + row * 5) * 0.08}s` }}
               />
-            );
-          })}
+            ))
+          )}
+          
+          {/* Lines from Agents to Data Sources (bottom) */}
+          {[0, 1, 2, 3, 4].map((i) => (
+            <line
+              key={`agent-data-${i}`}
+              x1="50%"
+              y1="72%"
+              x2={`${10 + i * 20}%`}
+              y2="85%"
+              stroke="url(#lineGradient)"
+              strokeWidth="2"
+              className="animate-pulse"
+              style={{ animationDelay: `${i * 0.12}s` }}
+            />
+          ))}
         </svg>
 
-        <div className="grid grid-cols-5 gap-3 relative" style={{ zIndex: 1 }}>
-          {/* Row 1 - Monitoring Agents */}
-          <AgentBadge color="blue" label="Tariff Rate Monitor" isHighlighted={highlighted.agents.includes("Tariff Rate Monitor")} />
-          <AgentBadge color="purple" label="HTS Classification Agent" isHighlighted={highlighted.agents.includes("HTS Classification Agent")} />
-          <AgentBadge color="pink" label="Origin Tracking Agent" isHighlighted={highlighted.agents.includes("Origin Tracking Agent")} />
-          <AgentBadge color="cyan" label="Supplier Capacity Agent" isHighlighted={highlighted.agents.includes("Supplier Capacity Agent")} />
-          <AgentBadge color="green" label="Policy Alert Agent" isHighlighted={highlighted.agents.includes("Policy Alert Agent")} />
-          
-          {/* Row 2 - Analysis Agents */}
-          <AgentBadge color="blue" label="Duty Impact Calculator" isHighlighted={highlighted.agents.includes("Duty Impact Calculator")} />
-          <AgentBadge color="purple" label="Cost Analysis Agent" isHighlighted={highlighted.agents.includes("Cost Analysis Agent")} />
-          <AgentBadge color="pink" label="Compliance Validator" isHighlighted={highlighted.agents.includes("Compliance Validator")} />
-          <AgentBadge color="cyan" label="Risk Assessment Agent" isHighlighted={highlighted.agents.includes("Risk Assessment Agent")} />
-          <AgentBadge color="green" label="Trade Rule Agent" isHighlighted={highlighted.agents.includes("Trade Rule Agent")} />
-          
-          {/* Row 3 - Processing Agents */}
-          <AgentBadge color="blue" label="Financial Impact Agent" isHighlighted={highlighted.agents.includes("Financial Impact Agent")} />
-          <AgentBadge color="purple" label="Supply Chain Agent" isHighlighted={highlighted.agents.includes("Supply Chain Agent")} />
-          <AgentBadge color="pink" label="Product Impact Agent" isHighlighted={highlighted.agents.includes("Product Impact Agent")} />
-          <AgentBadge color="cyan" label="Customer Impact Agent" isHighlighted={highlighted.agents.includes("Customer Impact Agent")} />
-          <AgentBadge color="green" label="Timeline Tracker" isHighlighted={highlighted.agents.includes("Timeline Tracker")} />
+        {/* Header */}
+        <div className="text-center mb-12 space-y-3 relative" style={{ zIndex: 1 }}>
+          <div className="flex items-center justify-center gap-3">
+            <div className="w-12 h-12 rounded-full bg-primary/20 border-2 border-primary flex items-center justify-center">
+              <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            <h2 className="text-3xl font-bold text-foreground">Tariff Alert - Agentic Intelligence Mesh</h2>
+          </div>
+          <p className="text-muted-foreground text-sm">Real-time intelligent orchestration across global tariff monitoring sources</p>
         </div>
-      </div>
 
-      {/* Data Sources Section - Now at Bottom */}
-      <div className="relative">
-        {/* Connection lines from agents to data sources */}
-        <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 0, height: '50%', top: '-25%' }}>
-          {[...Array(5)].map((_, i) => {
-            const x2 = ((i * 20) + 10) + '%';
-            return (
-              <line
-                key={i}
-                x1="50%"
-                y1="0%"
-                x2={x2}
-                y2="100%"
-                stroke="hsl(var(--primary))"
-                strokeWidth="2"
-                opacity="0.5"
-                className="animate-pulse"
-                style={{ animationDelay: `${i * 0.12}s` }}
-              />
-            );
-          })}
-        </svg>
-
-        <h3 className="text-center text-lg font-semibold text-foreground/80 mb-6 tracking-wider">DATA SOURCES OF TRUTH</h3>
-        <div className="grid grid-cols-5 gap-4 relative" style={{ zIndex: 1 }}>
-          <DataSourceCard 
-            name="US Trade Representative"
-            label="REAL-TIME TARIFF DATABASE"
-            description="Section 301 tariff rates and classifications"
-            color="blue"
-            isHighlighted={highlighted.dataSources.includes("US Trade Representative")}
-          />
-          
-          <DataSourceCard 
-            name="US Customs & Border Protection"
-            label="HTS CODE INTELLIGENCE"
-            description="Harmonized tariff schedule tracking"
-            color="purple"
-            isHighlighted={highlighted.dataSources.includes("US Customs & Border Protection")}
-          />
-          
-          <DataSourceCard 
-            name="SAP GTS"
-            label="GLOBAL TRADE SERVICES"
-            description="Component origin tracking via BOM"
-            color="pink"
-            isHighlighted={highlighted.dataSources.includes("SAP GTS")}
-          />
-          
-          <DataSourceCard 
-            name="Supplier Network Data"
-            label="SUPPLY CHAIN INTELLIGENCE"
-            description="Real-time supplier capacity and pricing"
-            color="cyan"
-            isHighlighted={highlighted.dataSources.includes("Supplier Network Data")}
-          />
-          
-          <DataSourceCard 
-            name="Trade Policy Monitor"
-            label="REGULATORY INTELLIGENCE"
-            description="Federal Register & trade announcements"
-            color="green"
-            isHighlighted={highlighted.dataSources.includes("Trade Policy Monitor")}
-          />
+        {/* Workflow Agents - Top Layer (5 Tabs) */}
+        <div className="relative mb-8" style={{ zIndex: 1 }}>
+          <div className="grid grid-cols-5 gap-4">
+            <WorkflowAgentCard
+              color="red"
+              icon="🔍"
+              title="Understand Alert"
+              description="Root cause analysis & impact assessment"
+              details={[
+                "Tariff change detection",
+                "Financial impact calculation",
+                "Customer exposure analysis",
+                "Timeline reconstruction"
+              ]}
+              workflowKey="Understand Alert"
+              isSelected={selectedWorkflow === "Understand Alert"}
+              onClick={() => setSelectedWorkflow(selectedWorkflow === "Understand Alert" ? null : "Understand Alert")}
+            />
+            
+            <WorkflowAgentCard
+              color="emerald"
+              icon="💡"
+              title="Recommended Actions"
+              description="AI-generated mitigation strategies"
+              details={[
+                "Supplier diversification",
+                "Pricing strategies",
+                "Inventory optimization",
+                "Trade policy advocacy"
+              ]}
+              workflowKey="Recommended Actions"
+              isSelected={selectedWorkflow === "Recommended Actions"}
+              onClick={() => setSelectedWorkflow(selectedWorkflow === "Recommended Actions" ? null : "Recommended Actions")}
+            />
+            
+            <WorkflowAgentCard
+              color="amber"
+              icon="🎯"
+              title="Decision Simulator"
+              description="Scenario modeling & optimization"
+              details={[
+                "Multi-action simulation",
+                "Cost-benefit analysis",
+                "Risk trade-off modeling",
+                "Timeline optimization"
+              ]}
+              workflowKey="Decision Simulator"
+              isSelected={selectedWorkflow === "Decision Simulator"}
+              onClick={() => setSelectedWorkflow(selectedWorkflow === "Decision Simulator" ? null : "Decision Simulator")}
+            />
+            
+            <WorkflowAgentCard
+              color="violet"
+              icon="⚡"
+              title="Trigger Workflow"
+              description="Automated execution engine"
+              details={[
+                "Procurement automation",
+                "Contract negotiation",
+                "Inventory adjustments",
+                "Stakeholder notifications"
+              ]}
+              workflowKey="Trigger Workflow"
+              isSelected={selectedWorkflow === "Trigger Workflow"}
+              onClick={() => setSelectedWorkflow(selectedWorkflow === "Trigger Workflow" ? null : "Trigger Workflow")}
+            />
+            
+            <WorkflowAgentCard
+              color="sky"
+              icon="📊"
+              title="Track Impact"
+              description="Real-time performance monitoring"
+              details={[
+                "Cost savings tracking",
+                "OTIF monitoring",
+                "Risk reduction metrics",
+                "Playbook learning"
+              ]}
+              workflowKey="Track Impact"
+              isSelected={selectedWorkflow === "Track Impact"}
+              onClick={() => setSelectedWorkflow(selectedWorkflow === "Track Impact" ? null : "Track Impact")}
+            />
+          </div>
         </div>
-      </div>
+
+        {/* Central Intelligence Hub */}
+        <div className="flex justify-center mb-8 relative" style={{ zIndex: 1 }}>
+          <Card className="w-96 p-6 bg-gradient-to-br from-primary/20 via-primary/10 to-accent/10 border-2 border-primary shadow-lg shadow-primary/20">
+            <div className="flex items-center justify-center gap-3 mb-2">
+              <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+              <h3 className="text-xl font-bold text-foreground">Central Alert Intelligence Hub</h3>
+            </div>
+            <p className="text-center text-sm text-muted-foreground">Central Orchestration & Decision Engine</p>
+          </Card>
+        </div>
+
+        {/* Middle Agent Layer */}
+        <div className="mb-8 relative" style={{ zIndex: 1 }}>
+          <div className="grid grid-cols-5 gap-3">
+            {/* Row 1 - Monitoring Agents */}
+            <AgentBadge color="blue" label="Tariff Rate Monitor" isHighlighted={highlighted.agents.includes("Tariff Rate Monitor")} />
+            <AgentBadge color="purple" label="HTS Classification Agent" isHighlighted={highlighted.agents.includes("HTS Classification Agent")} />
+            <AgentBadge color="pink" label="Origin Tracking Agent" isHighlighted={highlighted.agents.includes("Origin Tracking Agent")} />
+            <AgentBadge color="cyan" label="Supplier Capacity Agent" isHighlighted={highlighted.agents.includes("Supplier Capacity Agent")} />
+            <AgentBadge color="green" label="Policy Alert Agent" isHighlighted={highlighted.agents.includes("Policy Alert Agent")} />
+            
+            {/* Row 2 - Analysis Agents */}
+            <AgentBadge color="blue" label="Duty Impact Calculator" isHighlighted={highlighted.agents.includes("Duty Impact Calculator")} />
+            <AgentBadge color="purple" label="Cost Analysis Agent" isHighlighted={highlighted.agents.includes("Cost Analysis Agent")} />
+            <AgentBadge color="pink" label="Compliance Validator" isHighlighted={highlighted.agents.includes("Compliance Validator")} />
+            <AgentBadge color="cyan" label="Risk Assessment Agent" isHighlighted={highlighted.agents.includes("Risk Assessment Agent")} />
+            <AgentBadge color="green" label="Trade Rule Agent" isHighlighted={highlighted.agents.includes("Trade Rule Agent")} />
+            
+            {/* Row 3 - Processing Agents */}
+            <AgentBadge color="blue" label="Financial Impact Agent" isHighlighted={highlighted.agents.includes("Financial Impact Agent")} />
+            <AgentBadge color="purple" label="Supply Chain Agent" isHighlighted={highlighted.agents.includes("Supply Chain Agent")} />
+            <AgentBadge color="pink" label="Product Impact Agent" isHighlighted={highlighted.agents.includes("Product Impact Agent")} />
+            <AgentBadge color="cyan" label="Customer Impact Agent" isHighlighted={highlighted.agents.includes("Customer Impact Agent")} />
+            <AgentBadge color="green" label="Timeline Tracker" isHighlighted={highlighted.agents.includes("Timeline Tracker")} />
+          </div>
+        </div>
+
+        {/* Data Sources Section - Now at Bottom */}
+        <div className="relative" style={{ zIndex: 1 }}>
+          <h3 className="text-center text-lg font-semibold text-foreground/80 mb-6 tracking-wider">DATA SOURCES OF TRUTH</h3>
+          <div className="grid grid-cols-5 gap-4">
+            <DataSourceCard 
+              name="US Trade Representative"
+              label="REAL-TIME TARIFF DATABASE"
+              description="Section 301 tariff rates and classifications"
+              color="blue"
+              isHighlighted={highlighted.dataSources.includes("US Trade Representative")}
+            />
+            
+            <DataSourceCard 
+              name="US Customs & Border Protection"
+              label="HTS CODE INTELLIGENCE"
+              description="Harmonized tariff schedule tracking"
+              color="purple"
+              isHighlighted={highlighted.dataSources.includes("US Customs & Border Protection")}
+            />
+            
+            <DataSourceCard 
+              name="SAP GTS"
+              label="GLOBAL TRADE SERVICES"
+              description="Component origin tracking via BOM"
+              color="pink"
+              isHighlighted={highlighted.dataSources.includes("SAP GTS")}
+            />
+            
+            <DataSourceCard 
+              name="Supplier Network Data"
+              label="SUPPLY CHAIN INTELLIGENCE"
+              description="Real-time supplier capacity and pricing"
+              color="cyan"
+              isHighlighted={highlighted.dataSources.includes("Supplier Network Data")}
+            />
+            
+            <DataSourceCard 
+              name="Trade Policy Monitor"
+              label="REGULATORY INTELLIGENCE"
+              description="Federal Register & trade announcements"
+              color="green"
+              isHighlighted={highlighted.dataSources.includes("Trade Policy Monitor")}
+            />
+          </div>
+        </div>
       </div>
     </TooltipProvider>
   );
