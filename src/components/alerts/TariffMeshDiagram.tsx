@@ -86,70 +86,8 @@ export function TariffMeshDiagram() {
 
   return (
     <TooltipProvider>
-      <div className="w-full bg-gradient-to-b from-background via-accent/5 to-background p-8 rounded-lg border border-border/50 relative">
+      <div className="w-full bg-gradient-to-b from-background via-accent/5 to-background p-8 rounded-lg border border-border/50">
         
-        {/* SVG Connection Lines Layer - Behind everything */}
-        <svg 
-          className="absolute inset-0 w-full h-full pointer-events-none" 
-          style={{ zIndex: 0 }}
-          preserveAspectRatio="none"
-        >
-          <defs>
-            <linearGradient id="lineGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.7" />
-              <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0.3" />
-            </linearGradient>
-          </defs>
-          
-          {/* Lines from Workflow tabs (top) to Central Hub (middle) */}
-          {[0, 1, 2, 3, 4].map((i) => (
-            <line
-              key={`workflow-hub-${i}`}
-              x1={`${10 + i * 20}%`}
-              y1="18%"
-              x2="50%"
-              y2="32%"
-              stroke="url(#lineGradient)"
-              strokeWidth="2"
-              className="animate-pulse"
-              style={{ animationDelay: `${i * 0.15}s` }}
-            />
-          ))}
-          
-          {/* Lines from Central Hub to Agent badges */}
-          {[0, 1, 2, 3, 4].map((col) => 
-            [0, 1, 2].map((row) => (
-              <line
-                key={`hub-agent-${col}-${row}`}
-                x1="50%"
-                y1="38%"
-                x2={`${10 + col * 20}%`}
-                y2={`${48 + row * 8}%`}
-                stroke="url(#lineGradient)"
-                strokeWidth="1.5"
-                opacity="0.5"
-                className="animate-pulse"
-                style={{ animationDelay: `${(col + row * 5) * 0.08}s` }}
-              />
-            ))
-          )}
-          
-          {/* Lines from Agents to Data Sources (bottom) */}
-          {[0, 1, 2, 3, 4].map((i) => (
-            <line
-              key={`agent-data-${i}`}
-              x1="50%"
-              y1="72%"
-              x2={`${10 + i * 20}%`}
-              y2="85%"
-              stroke="url(#lineGradient)"
-              strokeWidth="2"
-              className="animate-pulse"
-              style={{ animationDelay: `${i * 0.12}s` }}
-            />
-          ))}
-        </svg>
-
         {/* Header */}
         <div className="text-center mb-12 space-y-3 relative" style={{ zIndex: 1 }}>
           <div className="flex items-center justify-center gap-3">
@@ -164,7 +102,7 @@ export function TariffMeshDiagram() {
         </div>
 
         {/* Workflow Agents - Top Layer (5 Tabs) */}
-        <div className="relative mb-8" style={{ zIndex: 1 }}>
+        <div className="relative mb-4">
           <div className="grid grid-cols-5 gap-4">
             <WorkflowAgentCard
               color="red"
@@ -248,8 +186,13 @@ export function TariffMeshDiagram() {
           </div>
         </div>
 
+        {/* Connector: Workflow → Central Hub */}
+        <div className="flex justify-center mb-4">
+          <div className="w-0.5 h-8 bg-gradient-to-b from-primary/60 to-primary/30 animate-pulse" />
+        </div>
+
         {/* Central Intelligence Hub */}
-        <div className="flex justify-center mb-8 relative" style={{ zIndex: 1 }}>
+        <div className="flex justify-center mb-4">
           <Card className="w-96 p-6 bg-gradient-to-br from-primary/20 via-primary/10 to-accent/10 border-2 border-primary shadow-lg shadow-primary/20">
             <div className="flex items-center justify-center gap-3 mb-2">
               <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -261,8 +204,13 @@ export function TariffMeshDiagram() {
           </Card>
         </div>
 
+        {/* Connector: Central Hub → Agents */}
+        <div className="flex justify-center mb-4">
+          <div className="w-0.5 h-8 bg-gradient-to-b from-primary/60 to-primary/30 animate-pulse" />
+        </div>
+
         {/* Middle Agent Layer */}
-        <div className="mb-8 relative" style={{ zIndex: 1 }}>
+        <div className="mb-4">
           <div className="grid grid-cols-5 gap-3">
             {/* Row 1 - Monitoring Agents */}
             <AgentBadge color="blue" label="Tariff Rate Monitor" isHighlighted={highlighted.agents.includes("Tariff Rate Monitor")} />
@@ -287,8 +235,13 @@ export function TariffMeshDiagram() {
           </div>
         </div>
 
+        {/* Connector: Agents → Data Sources */}
+        <div className="flex justify-center mb-4">
+          <div className="w-0.5 h-8 bg-gradient-to-b from-primary/60 to-primary/30 animate-pulse" />
+        </div>
+
         {/* Data Sources Section - Now at Bottom */}
-        <div className="relative" style={{ zIndex: 1 }}>
+        <div>
           <h3 className="text-center text-lg font-semibold text-foreground/80 mb-6 tracking-wider">DATA SOURCES OF TRUTH</h3>
           <div className="grid grid-cols-5 gap-4">
             <DataSourceCard 
