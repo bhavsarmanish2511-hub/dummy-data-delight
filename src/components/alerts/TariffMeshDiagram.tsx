@@ -1,6 +1,9 @@
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { Download } from "lucide-react";
+import { jsPDF } from "jspdf";
 
 // Define data sources and agents for each workflow tab
 const workflowDataMapping = {
@@ -83,6 +86,197 @@ export function TariffMeshDiagram() {
 
   const highlighted = getHighlightedItems();
 
+  const generateReport = () => {
+    const doc = new jsPDF();
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const margin = 20;
+    let y = 20;
+
+    const addText = (text: string, size: number, bold: boolean = false, color: number[] = [0, 0, 0]) => {
+      doc.setFontSize(size);
+      doc.setFont("helvetica", bold ? "bold" : "normal");
+      doc.setTextColor(color[0], color[1], color[2]);
+      const lines = doc.splitTextToSize(text, pageWidth - 2 * margin);
+      lines.forEach((line: string) => {
+        if (y > 270) {
+          doc.addPage();
+          y = 20;
+        }
+        doc.text(line, margin, y);
+        y += size * 0.5;
+      });
+      y += 3;
+    };
+
+    const addSection = (title: string) => {
+      y += 5;
+      addText(title, 14, true, [0, 100, 150]);
+      y += 2;
+    };
+
+    // Title Page
+    doc.setFillColor(0, 50, 100);
+    doc.rect(0, 0, pageWidth, 60, "F");
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(24);
+    doc.setFont("helvetica", "bold");
+    doc.text("Castrol Supply Chain", margin, 30);
+    doc.setFontSize(18);
+    doc.text("Agentic Intelligence Mesh Report", margin, 45);
+    
+    y = 80;
+    addText("Generated: " + new Date().toLocaleString(), 10, false, [100, 100, 100]);
+    y += 10;
+
+    // Executive Summary
+    addSection("EXECUTIVE SUMMARY");
+    addText("This report provides a comprehensive overview of the Tariff Alert Agentic Intelligence Mesh system deployed for Castrol's global supply chain operations. The system leverages 15 specialized AI agents connected to 5 authoritative data sources to provide real-time tariff monitoring, impact assessment, and automated response capabilities.", 11);
+
+    // Architecture Overview
+    addSection("MESH ARCHITECTURE OVERVIEW");
+    addText("The Intelligence Mesh operates on a four-layer architecture:", 11);
+    addText("• Layer 1 (Top): Workflow Tabs - User-facing operational interfaces", 10);
+    addText("• Layer 2: Central Alert Intelligence Hub - Orchestration engine", 10);
+    addText("• Layer 3: AI Agent Network - 15 specialized processing agents", 10);
+    addText("• Layer 4 (Bottom): Data Sources of Truth - 5 authoritative feeds", 10);
+
+    // Central Orchestration
+    addSection("CENTRAL ALERT INTELLIGENCE HUB");
+    addText("The Central Orchestration Hub serves as the decision engine that:", 11);
+    addText("• Routes incoming alerts to appropriate workflow stages", 10);
+    addText("• Coordinates agent collaboration across analysis tasks", 10);
+    addText("• Maintains state consistency across all processing layers", 10);
+    addText("• Aggregates insights from multiple agents for unified recommendations", 10);
+    addText("• Ensures compliance validation at each decision checkpoint", 10);
+
+    // Workflow Tabs
+    doc.addPage();
+    y = 20;
+    addSection("WORKFLOW STAGES ANALYSIS");
+
+    Object.entries(workflowDataMapping).forEach(([workflow, data]) => {
+      addText(`▶ ${workflow}`, 12, true, [50, 50, 150]);
+      addText("Agents Engaged:", 10, true);
+      addText(data.agents.join(", "), 9);
+      addText("Data Sources Used:", 10, true);
+      data.dataSources.forEach(ds => {
+        addText(`• ${ds.name}: ${ds.desc}`, 9);
+      });
+      y += 5;
+    });
+
+    // Agent Descriptions
+    doc.addPage();
+    y = 20;
+    addSection("AI AGENT CAPABILITIES");
+    const agentDescriptions = [
+      { name: "Tariff Rate Monitor", desc: "Real-time monitoring of tariff rate changes across Section 301, 201, and 232 schedules" },
+      { name: "HTS Classification Agent", desc: "Automated harmonized tariff schedule code validation and reclassification analysis" },
+      { name: "Origin Tracking Agent", desc: "Country of origin determination using bill of materials decomposition" },
+      { name: "Supplier Capacity Agent", desc: "Alternative supplier identification and capacity assessment" },
+      { name: "Policy Alert Agent", desc: "Federal Register and USTR announcement monitoring" },
+      { name: "Duty Impact Calculator", desc: "Landed cost calculation including duties, fees, and taxes" },
+      { name: "Cost Analysis Agent", desc: "Total cost of ownership modeling across sourcing scenarios" },
+      { name: "Compliance Validator", desc: "Trade compliance verification against ITAR, EAR, and FTA rules" },
+      { name: "Risk Assessment Agent", desc: "Probabilistic risk scoring for supply chain disruption scenarios" },
+      { name: "Trade Rule Agent", desc: "Free trade agreement eligibility and preferential duty analysis" },
+      { name: "Financial Impact Agent", desc: "P&L impact modeling and budget variance forecasting" },
+      { name: "Supply Chain Agent", desc: "End-to-end logistics optimization and lead time analysis" },
+      { name: "Product Impact Agent", desc: "Product portfolio exposure assessment and SKU-level analysis" },
+      { name: "Customer Impact Agent", desc: "Customer segment exposure and pricing strategy modeling" },
+      { name: "Timeline Tracker", desc: "Regulatory timeline monitoring and deadline management" }
+    ];
+
+    agentDescriptions.forEach(agent => {
+      addText(`• ${agent.name}`, 10, true);
+      addText(`  ${agent.desc}`, 9);
+    });
+
+    // Data Sources
+    doc.addPage();
+    y = 20;
+    addSection("DATA SOURCES OF TRUTH");
+    const dataSources = [
+      { name: "US Trade Representative (USTR)", desc: "Official Section 301 tariff rates, exclusion lists, and modification announcements. Provides authoritative duty rate data for China-origin products." },
+      { name: "US Customs & Border Protection", desc: "Harmonized Tariff Schedule (HTS) code database, ruling letters, and classification decisions. Source for tariff classification intelligence." },
+      { name: "SAP GTS (Global Trade Services)", desc: "Internal trade compliance system containing product bill of materials, country of origin data, supplier contracts, and inventory positions." },
+      { name: "Supplier Network Data", desc: "Real-time supplier capacity, pricing, and performance data across global manufacturing network. Enables alternative sourcing analysis." },
+      { name: "Trade Policy Monitor", desc: "Aggregated feed from Federal Register, trade publications, and policy think tanks. Provides early warning on regulatory changes." }
+    ];
+
+    dataSources.forEach(ds => {
+      addText(`▶ ${ds.name}`, 11, true, [50, 100, 50]);
+      addText(ds.desc, 9);
+      y += 3;
+    });
+
+    // Critical Alert Case Study
+    doc.addPage();
+    y = 20;
+    addSection("CASE STUDY: US TARIFF IMPACT - CHINESE ADDITIVE IMPORTS (SECTION 301)");
+    
+    addText("Alert Classification: CRITICAL", 11, true, [200, 0, 0]);
+    addText("Regulatory Basis: Section 301 of the Trade Act of 1974", 10);
+    addText("Effective Impact: 25% additional tariff on HTS codes 3811.21, 3811.29, 3811.90", 10);
+    y += 5;
+
+    addText("ALERT TRIGGER DETAILS:", 11, true);
+    addText("The alert was triggered when the Tariff Rate Monitor agent detected a Federal Register announcement (FR Doc 2024-XXXXX) confirming the continuation and expansion of Section 301 tariffs on Chinese lubricant additives. The HTS Classification Agent cross-referenced Castrol's product portfolio and identified 47 SKUs with direct exposure.", 10);
+    y += 5;
+
+    addText("IMPACT ASSESSMENT:", 11, true);
+    addText("• Annual Spend Affected: $28.4M in Chinese-sourced additives", 10);
+    addText("• Tariff Exposure: $7.1M annually at 25% rate", 10);
+    addText("• Products Impacted: 47 SKUs across automotive and industrial lines", 10);
+    addText("• Customers Affected: 312 B2B accounts, 15 OEM contracts", 10);
+    addText("• Margin Erosion: 3.2% gross margin compression if fully absorbed", 10);
+    y += 5;
+
+    addText("WORKFLOW EXECUTION:", 11, true);
+    
+    addText("Stage 1 - Understand Alert:", 10, true);
+    addText("The Origin Tracking Agent traced component sourcing through SAP GTS bill of materials data, confirming Chinese origin for key additive packages. The Financial Impact Agent calculated the $7.1M annual exposure using current landed costs plus new duty rates.", 10);
+    y += 3;
+
+    addText("Stage 2 - Recommended Actions:", 10, true);
+    addText("The Supplier Capacity Agent identified 3 alternative suppliers (2 in Singapore, 1 in Germany) with combined capacity to absorb 65% of affected volume within 6 months. The Cost Analysis Agent modeled 4 scenarios: full absorption, partial pass-through, supplier diversification, and product reformulation.", 10);
+    y += 3;
+
+    addText("Stage 3 - Decision Simulator:", 10, true);
+    addText("Multi-variable simulation projected that a hybrid approach (40% supplier shift + 30% price increase + 30% absorption) minimizes customer churn while protecting 70% of exposed margin. Timeline optimization showed fastest implementation path through Singapore supplier qualification.", 10);
+    y += 3;
+
+    addText("Stage 4 - Trigger Workflow:", 10, true);
+    addText("Automated workflows initiated: RFQ generation to alternative suppliers, pricing approval escalation to commercial leadership, customer communication templates for key accounts, and inventory buffer orders for transition period.", 10);
+    y += 3;
+
+    addText("Stage 5 - Track Impact:", 10, true);
+    addText("Real-time dashboards established for: duty savings realization, supplier qualification progress, customer retention metrics, and OTIF performance during transition. Weekly executive summary automated to supply chain leadership.", 10);
+
+    // Conclusion
+    doc.addPage();
+    y = 20;
+    addSection("SYSTEM BENEFITS & OUTCOMES");
+    addText("The Agentic Intelligence Mesh delivers measurable improvements:", 11);
+    addText("• Alert Detection: 85% faster identification of regulatory changes", 10);
+    addText("• Impact Analysis: 90% reduction in manual analysis time", 10);
+    addText("• Decision Quality: Data-driven recommendations vs. intuition", 10);
+    addText("• Response Time: 70% faster execution of mitigation strategies", 10);
+    addText("• Compliance: 100% audit trail for regulatory decisions", 10);
+    addText("• Cost Avoidance: Projected $4.2M savings through proactive management", 10);
+    y += 10;
+
+    addSection("APPENDIX: TECHNICAL SPECIFICATIONS");
+    addText("• Architecture: Event-driven microservices with real-time streaming", 10);
+    addText("• Data Refresh: USTR/CBP feeds updated every 15 minutes", 10);
+    addText("• Agent Latency: Average response time < 2 seconds", 10);
+    addText("• Integration: REST APIs to SAP, Salesforce, and Oracle systems", 10);
+    addText("• Security: SOC 2 Type II compliant, end-to-end encryption", 10);
+
+    // Save the PDF
+    doc.save("Castrol_Intelligence_Mesh_Report.pdf");
+  };
+
   return (
     <div className="w-full bg-gradient-to-b from-background via-accent/5 to-background p-8 rounded-lg border border-border/50">
 
@@ -97,6 +291,13 @@ export function TariffMeshDiagram() {
           <h2 className="text-3xl font-bold text-foreground">Tariff Alert - Agentic Intelligence Mesh</h2>
         </div>
         <p className="text-muted-foreground text-sm">Real-time intelligent orchestration across global tariff monitoring sources</p>
+        <Button 
+          onClick={generateReport} 
+          className="mt-4 bg-primary hover:bg-primary/90 text-primary-foreground"
+        >
+          <Download className="w-4 h-4 mr-2" />
+          Download Report
+        </Button>
       </div>
 
       {/* Workflow Agents - Top Layer (5 Tabs) */}
