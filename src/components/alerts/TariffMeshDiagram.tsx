@@ -281,23 +281,28 @@ export function TariffMeshDiagram() {
     <div className="w-full bg-gradient-to-b from-background via-accent/5 to-background p-8 rounded-lg border border-border/50">
 
       {/* Header */}
-      <div className="text-center mb-12 space-y-3 relative" style={{ zIndex: 1 }}>
-        <div className="flex items-center justify-center gap-3">
-          <div className="w-12 h-12 rounded-full bg-primary/20 border-2 border-primary flex items-center justify-center">
-            <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-            </svg>
+      <div className="mb-12 space-y-3 relative" style={{ zIndex: 1 }}>
+        <div className="flex items-center justify-between">
+          <div className="flex-1" />
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-full bg-primary/20 border-2 border-primary flex items-center justify-center">
+              <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            <h2 className="text-3xl font-bold text-foreground">Tariff Alert - Agentic Intelligence Mesh</h2>
           </div>
-          <h2 className="text-3xl font-bold text-foreground">Tariff Alert - Agentic Intelligence Mesh</h2>
+          <div className="flex-1 flex justify-end">
+            <Button 
+              onClick={generateReport} 
+              className="bg-primary hover:bg-primary/90 text-primary-foreground"
+            >
+              <Download className="w-4 h-4 mr-2" />
+              Download Report
+            </Button>
+          </div>
         </div>
-        <p className="text-muted-foreground text-sm">Real-time intelligent orchestration across global tariff monitoring sources</p>
-        <Button 
-          onClick={generateReport} 
-          className="mt-4 bg-primary hover:bg-primary/90 text-primary-foreground"
-        >
-          <Download className="w-4 h-4 mr-2" />
-          Download Report
-        </Button>
+        <p className="text-muted-foreground text-sm text-center">Real-time intelligent orchestration across global tariff monitoring sources</p>
       </div>
 
       {/* Workflow Agents - Top Layer (5 Tabs) */}
